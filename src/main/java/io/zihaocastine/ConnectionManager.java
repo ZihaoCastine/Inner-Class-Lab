@@ -6,22 +6,39 @@ package io.zihaocastine;
 public class ConnectionManager {
 
     static int numberOfConnection=0;
-    ConnectionManager(String ip, String port, String protocol){
-        if(numberOfConnection<10){
-            //new ManagedConnection("locohost", "8080","HTTP").connect();
-            System.out.println(new ManagedConnection(ip, port,protocol).connect());
+    public Connection getConnection(String ip, String port, String protocol){
+        if(numberOfConnection<5){
+            numberOfConnection++;
+            return this.new ManagedConnection(ip, port,protocol);
+        }else{
+            return null;
         }
-        numberOfConnection++;
+
     }
 
     private class ManagedConnection implements Connection{
         String IP;
         String Port;
         String Protocol;
+        boolean connected;
         ManagedConnection(String ip, String port, String protocol){
             IP=ip;
             Port=port;
-            Protocol=protocol;
+            switch (protocol){
+                case "HTTP":
+                    Protocol="HTTP";
+                    break;
+                case "SSH":
+                    Protocol="SSH";
+                    break;
+                case "TCP":
+                    Protocol="TCP";
+                    break;
+                default:
+                    Protocol="HTTP";
+                    break;
+            }
+            connected=true;
         }
         public String getIP() {
 
@@ -37,16 +54,17 @@ public class ConnectionManager {
         }
 
         public String connect() {
-            if(getProtocol().equals(null)){
-                return null;
-            }else {
+            if(connected){
                 return "connect IP: "+IP+" Port: "+Port;
+            }else {
+                return null;
             }
         }
 
         public void close(){
 
             numberOfConnection--;
+            connected=false;
         }
 
     }

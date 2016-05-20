@@ -6,6 +6,12 @@ package io.zihaocastine;
 public class ConnectionDriver {
     public static void main(String[] args) {
         ConnectionManager connection=new ConnectionManager();
+        Connection connection1=connection.getConnection("lochhost","8080","HTTP");
+        System.out.println(connection1.getIP());
+        System.out.println(connection1.getPort());
+        System.out.println(connection1.getProtocol());
+
+
 
     }
 }
